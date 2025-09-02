@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState,  useContext } from "react";
 import "./navbar.css";
 import imgs from '../../assets/assets';
+import { App_Context } from "../context/context";
 
 
 const Navbar = ({ pending, completed, onAddClick }) => {
+
+    const{searchTerm , setSearchTerm} = useContext(App_Context);
 
     return (
         <div className="navbar">
@@ -16,7 +19,7 @@ const Navbar = ({ pending, completed, onAddClick }) => {
             <div className="navbar-center">
                 <div className="search-container">
                     <span className="search-icon">🔍</span>
-                    <input type="text" placeholder="Search tasks..." className="search-input" />
+                    <input type="text" placeholder="Search tasks..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}  className="search-input"/>
                 </div>
             </div>
             <div className="navbar-right">

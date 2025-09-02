@@ -4,10 +4,10 @@ import {App_Context} from "../context/context";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const TaskAdder = ({ isOpen, onClose}) => {
+const TaskAdder = ({ isOpen, onClose, onAddTask}) => { 
   const [task, setTask] = useState("");
   const [deadline, setDeadline] = useState("");
-  const [description, setdescription] = useState("")
+  const [description, setDescription] = useState("")
   const {url} = useContext(App_Context);
 
   const handleSubmit = async(e) => {
@@ -20,16 +20,17 @@ const TaskAdder = ({ isOpen, onClose}) => {
 
     try{
         const response = await axios.post(newurl, {task, description, deadline});
-        toast.success("Task added successfully");
+        onAddTask(response.data);
+        toast.success(response.data.message || "Task added successfully");
     }
     catch(error){
-        toast.error("Error adding task");
+        toast.error(error);
         return;
     }
 
     setTask("");
     setDeadline("");
-    setdescription("");
+    setDescription("");
     onClose();
   };
 
@@ -55,7 +56,7 @@ const TaskAdder = ({ isOpen, onClose}) => {
                 type="text"
                 placeholder="description"
                 value={description}
-                onChange={(e) => setdescription(e.target.value)}
+                onChange={(e) => setDescription(e.target.value)}
             />
             <input
                 type="date"
