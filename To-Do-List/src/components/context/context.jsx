@@ -6,7 +6,7 @@ export const App_Context = createContext();
 
 export const App_Context_Provider = ({ children }) => {
     
-    const url = 'http://localhost:3000';
+    const url = 'https://to-do-list-backend-wsyo.onrender.com';
     const [searchTerm, setSearchTerm] = useState("");
     const [pendingCount, setPendingCount] = useState(0);
     const [completedCount, setCompletedCount] = useState(0);
