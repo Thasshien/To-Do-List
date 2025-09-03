@@ -51,6 +51,7 @@ const TaskAdder = ({ isOpen, onClose, onAddTask}) => {
                 placeholder="Task"
                 value={task}
                 onChange={(e) => setTask(e.target.value)}
+                required
             />
             <input
                 type="text"
@@ -62,6 +63,8 @@ const TaskAdder = ({ isOpen, onClose, onAddTask}) => {
                 type="date"
                 value={deadline}
                 onChange={(e) => setDeadline(e.target.value)}
+                min = {new Date().toISOString().split("T")[0]}
+                required
             />
             <div className="modal-actions">
                 <button type="button" onClick={onClose}>

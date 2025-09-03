@@ -214,6 +214,7 @@
 @media (max-width: 480px) {
   .tasks_container {
     padding: 0 0.5rem;
+    width:100vw;
   }
   
   .task-list {

@@ -186,3 +186,11 @@ body.dark .rej {
     background-size: 60px 60px, 80px 80px;
   }
 }
+
+@media (max-width: 480px) {
+  .body{
+    width:100vw;
+    height:100vh;
+    margin:auto;
+  }
+}
