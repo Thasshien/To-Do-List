@@ -50,19 +50,18 @@ const deleteTask = async (req, res) => {
 
 const completedTask = async(req,res) => {
     const { id } = req.body;
-    console.log(id);
     try {       
         if(!id){
             return res.status(400).json({"message":"No ID given"})
         }
         const task = await taskModel.findById(id);
-        console.log(task); 
+
         if(!completedTask){
             return res.status(404).json({ message: "Task not found" });
         }
         task.status = "completed";
         await task.save();
-        console.log("after changes: ",task);
+
         res.status(200).json({ message: "Task Completed successfully" });
     }
     catch (error) {
