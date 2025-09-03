@@ -6,7 +6,7 @@
     import TaskAdder from "../taskAdder/taskAdder";
 
     const Body = ({ isModalOpen, setIsModalOpen }) => {
-        const { url,searchTerm } = useContext(App_Context);
+        const { url,searchTerm,setPendingCount,setCompletedCount } = useContext(App_Context);
         const [tasks, setTasks] = useState([]);
         const pendingDeletesRef = useRef({});
 
@@ -21,7 +21,7 @@
                     const res = await axios.get(newurl);
                     const tasks = res.data || [];
                     setTasks(tasks);
-                } 
+                }   
                 catch (error) {
                     console.error("Error fetching Task:", error);
                 }
@@ -70,39 +70,44 @@
             try {
                 let newurl = url + '/api/task/completed';
                 await axios.put(newurl, { id });
-                setTasks(tasks.filter((task) => task._id !== id));
+                setTasks(prev =>
+                    prev.map((task) =>
+                        task._id === id ? { ...task, status: 'completed' } : task
+                    )
+                );
             } catch (error) {
                 console.error("Error marking task as completed:", error);
             }
         };
 
         const undoDelete = (id) => {
-        const entry = pendingDeletesRef.current[id];
-        if (!entry) {
-        toast.error("Undo not available (too late)");
-        return;
-        }
-        // cancel pending deletion
-        clearTimeout(entry.timeoutId);
+            const entry = pendingDeletesRef.current[id];
+            if (!entry) {
+            toast.error("Undo not available (too late)");
+            return;
+            }
+            // cancel pending deletion
+            clearTimeout(entry.timeoutId);
 
-        setTasks((prev) => [entry.task, ...prev]);
-        // remove from pending map
-        delete pendingDeletesRef.current[id];
+            setTasks((prev) => [entry.task, ...prev]);
+            // remove from pending map
+            delete pendingDeletesRef.current[id];
 
-        toast.success("Undo successful!");
-    };
+            toast.success("Undo successful!");
+        };
+
+        const sortedTasks = [...tasks].sort((a,b) => {
+            if (a.status === 'pending' && b.status === 'completed') return -1;
+            if (a.status === 'completed' && b.status === 'pending') return 1;
+        });
         
+        useEffect(() => {
+            setPendingCount(tasks.filter(task => task.status === 'pending').length);
+            setCompletedCount(tasks.filter(task => task.status === 'completed').length);
+            }, [tasks]);
+
         return (
             <div className="Tasks">
-
-                <div className="action-buttons">
-                    <button
-                        className="action-btn add-btn"
-                        onClick={() => setIsModalOpen(true)}
-                    >
-                        +
-                    </button>
-                </div>
 
                 <TaskAdder
                     isOpen={isModalOpen}
@@ -113,23 +118,18 @@
                 <div className="tasks_container">
                     {tasks.length === 0 ? (
                         <div className="no-requests">
-                            <p>Caught up for now</p>
+                            <p>No pending tasks for now</p>
                             <p>Click on the + icon to add Tasks</p>
                         </div>
                     ) : (
                         <div className="task-list">
-                        {tasks.length === 0 ? (
-                            <div className="no-requests">
-                            <p>Caught up for now</p>
-                            <p>Click on the + icon to add Tasks</p>
-                            </div>
-                        ) : filteredTasks.length === 0 ? (
+                        {filteredTasks.length === 0 ? (
                             <div className="no-requests">
                             <p>No tasks match your search.</p>
                             </div>
                         ) : (
                             filteredTasks.map((task, idx) => (
-                                <div key={task._id || idx} className="task-item">
+                                <div key={task._id || idx} className={`task-item${task.status === 'completed' ? ' completed' : ''}`}>
                                     <div className="task-main">
                                     <span className="task-name">{task.task}</span>
                                     <span className="description">{task.description}</span>
@@ -139,7 +139,7 @@
                                     </div>
                                     <div className="options">
                                     <button className="acc" onClick={() => completedhandeler(task._id)}>
-                                        Completed
+                                        {task.status === 'completed' ? 'Completed' : 'Mark as done'}
                                     </button>
                                     <button className="rej" onClick={() => deleteHandler(task._id)}>
                                         Delete

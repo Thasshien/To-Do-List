@@ -8,11 +8,21 @@ export const App_Context_Provider = ({ children }) => {
     
     const url = 'http://localhost:3000';
     const [searchTerm, setSearchTerm] = useState("");
+    const [pendingCount, setPendingCount] = useState(0);
+    const [completedCount, setCompletedCount] = useState(0);
+    const [theme, setTheme] = useState("light");
+
 
     const contextValue = {
         url,
         searchTerm,
         setSearchTerm,
+        pendingCount,
+        setPendingCount,
+        completedCount,
+        setCompletedCount,
+        theme,
+        setTheme,
     };
 
     return (

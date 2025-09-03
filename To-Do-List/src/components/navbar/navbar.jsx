@@ -2,11 +2,26 @@ import React, { useState,  useContext } from "react";
 import "./navbar.css";
 import imgs from '../../assets/assets';
 import { App_Context } from "../context/context";
+import { FaSun, FaMoon } from "react-icons/fa";
 
 
 const Navbar = ({ pending, completed, onAddClick }) => {
 
     const{searchTerm , setSearchTerm} = useContext(App_Context);
+    const {theme, setTheme} = useContext(App_Context);
+
+    const themeHandler = () => {
+        if(theme === "light"){
+            document.body.classList.add("dark");
+            document.body.classList.remove("light");
+            setTheme("dark");
+        }
+        else{
+            document.body.classList.remove("dark");
+            document.body.classList.add("light");
+            setTheme("light");
+        }
+    }
 
     return (
         <div className="navbar">
@@ -42,6 +57,9 @@ const Navbar = ({ pending, completed, onAddClick }) => {
                 <div className="action-buttons">
                     <button className="action-btn add-btn" onClick={onAddClick}>
                         +
+                    </button>
+                    <button className="theme-toggle" onClick={themeHandler}>
+                        {theme === "light" ? <FaMoon /> : <FaSun />}
                     </button>
                 </div>
                 

@@ -9,7 +9,7 @@ const TaskAdder = ({ isOpen, onClose, onAddTask}) => {
   const [deadline, setDeadline] = useState("");
   const [description, setDescription] = useState("")
   const {url} = useContext(App_Context);
-
+  
   const handleSubmit = async(e) => {
     e.preventDefault();
     if (!task.trim()){

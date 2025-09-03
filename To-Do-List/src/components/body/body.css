@@ -1,4 +1,3 @@
-/* Enhanced Task List Styles */
 .Tasks {
   min-height: 100vh;
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
@@ -102,6 +101,12 @@
   border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
+.task-item.completed .task-deadline{
+  background: rgb(26, 191, 26);
+  opacity: 0.5;
+  color: white;
+}
+
 .options {
   display: flex;
   padding-top: 1.5rem;
@@ -164,6 +169,10 @@
   font-weight: 600;
   margin-left: 1rem;
   text-decoration: underline;
+}
+
+.task-item.completed {
+  opacity: 0.5;
 }
 
 @media (max-width: 768px) {

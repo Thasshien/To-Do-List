@@ -49,7 +49,6 @@ const deleteTask = async (req, res) => {
 }
 
 const completedTask = async(req,res) => {
-    console.log('Entered backend')
     const { id } = req.body;
     console.log(id);
     try {       
@@ -71,5 +70,33 @@ const completedTask = async(req,res) => {
     }
 };
 
+const getCounts = async(req,res) =>{
+    let complete = 0;
+    let pendin = 0;
+    
+    try{
+        const tasks = await taskModel.find();
+        if(!tasks){
+            return;
+        }
+        tasks.map((task,id) => {
+            if(task.status === "completed"){
+                complete += 1
+            }
+            else{
+                pendin += 1
+            }
+        });
+        return res.status(200).json({
+            completed : complete,
+            pending : pendin
+        })
+    }
+    catch(error){
+        res.status(500).json({error : error.message});
+    }
 
-module.exports = {addTask , getTasks, deleteTask, completedTask};
+};
+
+
+module.exports = {addTask , getTasks, deleteTask, completedTask, getCounts};

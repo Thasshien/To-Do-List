@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import './App.css';
 import Navbar from './components/navbar/navbar';
 import Body from './components/body/body';
 import { ToastContainer } from "react-toastify";
+import { App_Context } from './components/context/context';
 
 function App() {
-  const [pendingCount, setPendingCount] = useState(3);
-  const [completedCount, setCompletedCount] = useState(5);
-  const [isModalOpen, setIsModalOpen] = useState(false);  
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const {pendingCount, completedCount, setTheme} = useContext(App_Context);   
 
   return (
     <div className="App">
